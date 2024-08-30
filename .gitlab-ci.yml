@@ -1,0 +1,25 @@
+stages:
+  - check
+  - testing
+
+check:format:
+  stage: check
+  image: docker.promobit.loc/common/googletest:v1.11.0@sha256:cc9f1e5e85b2f463282887cc226b475bd1a657ecd153d363bc30a19bd6449fb4
+  script:
+    - ./check_format.py
+  tags: [docker]
+
+testing:googletest:
+  stage: testing
+  image: docker.promobit.loc/common/googletest:v1.11.0@sha256:cc9f1e5e85b2f463282887cc226b475bd1a657ecd153d363bc30a19bd6449fb4
+  script:
+    - cmake -S . -B _builds -G Ninja -D CMAKE_BUILD_TYPE=Release -D CMAKE_VERBOSE_MAKEFILE=ON -D CMAKE_PREFIX_PATH=${HOME}/opt/googletest
+    - cmake --build _builds
+    - ctest --output-junit report.xml --test-dir _builds -C Release -VV
+  artifacts:
+    paths:
+      - _builds/report.xml
+    reports:
+      junit: _builds/report.xml
+    expire_in: 24 hours
+  tags: [docker]
