@@ -1,6 +1,6 @@
 FROM ubuntu:24.04
 
-MAINTAINER Dmitrii Snimshchikov <dmitrii.snimshchikov13@gmail.com>
+MAINTAINER Roman Kornienko <eniac_r@vk.com>
 
 ENV TZ=Europe/Moscow
 
